@@ -29,9 +29,11 @@ find_package(VTK REQUIRED COMPONENTS
     RenderingAnnotation
 )
 
+enable_testing()
 add_subdirectory(core)
 add_subdirectory(viz)
 add_subdirectory(app)
+add_subdirectory(tests)
 
 qt_standard_project_setup()
 

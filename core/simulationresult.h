@@ -3,10 +3,6 @@
 
 #include <vector>
 
-using namespace std;
-
-
-
 class SimulationResult
 {
 public:
