@@ -5,10 +5,9 @@
 #include <functional>
 #include <atomic>
 
-#include "simulationresult.h"
-#include "simulationconfig.h"
+#include "SimulationResult.h"
+#include "SimulationConfig.h"
 
-using namespace std;
 
 class SimulationEngine
 {
