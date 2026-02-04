@@ -3,9 +3,18 @@ name: Core Logic CI (Headless)
 # Triggering conditions: Pushing to the master branch, or any pull request.
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: [ "master" ]
+    paths:
+      - 'core/**'
+      - 'tests/**'
+      - '.github/workflows/core-ci.yml'
+      - 'CMakeLists.txt'
   pull_request:
-    branches: [ "master", "main" ]
+    paths:
+      - 'core/**'
+      - 'tests/**'
+      - '.github/workflows/core-ci.yml'
+      - 'CMakeLists.txt'
 
 jobs:
   build-and-test:
