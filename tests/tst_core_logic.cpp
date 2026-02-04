@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "../core/simulationengine.h"
-#include "../core/simulationconfig.h"
+#include "../core/SimulationEngine.h"
+#include "../core/SimulationConfig.h"
 
 // Test configuration parameter validation logic
 TEST(SimulationEngineTest, ConfigurationValidation) {
