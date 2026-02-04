@@ -1,4 +1,4 @@
-#include "simulationengine.h"
+#include "SimulationEngine.h"
 
 #include <algorithm>
 #include <stdexcept>

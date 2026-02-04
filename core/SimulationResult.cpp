@@ -1,4 +1,4 @@
-#include "simulationresult.h"
+#include "SimulationResult.h"
 
 #include <stdexcept>
 

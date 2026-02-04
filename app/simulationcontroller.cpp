@@ -1,4 +1,4 @@
-#include "simulationcontroller.h"
+#include "SimulationController.h"
 
 
 #include <QtConcurrent>          // QtConcurrent::run

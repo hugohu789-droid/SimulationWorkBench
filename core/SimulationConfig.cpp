@@ -1,4 +1,4 @@
-#include "simulationconfig.h"
+#include "SimulationConfig.h"
 
 SimulationConfig::SimulationConfig()
 {

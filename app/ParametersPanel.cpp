@@ -1,4 +1,4 @@
-#include "parameterspanel.h"
+#include "ParametersPanel.h"
 #include "ui_ParametersPanel.h"
 
 #include <QPushButton>

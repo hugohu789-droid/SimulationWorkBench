@@ -1,4 +1,4 @@
-#include "simulationview.h"
+#include "SimulationView.h"
 #include "vtkadapter.h"
 #include "../core/SimulationResult.h"
 
