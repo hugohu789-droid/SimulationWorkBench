@@ -25,7 +25,7 @@ private slots:
     void onRunButtonClicked();
 
 private:
-    Ui::ParametersPanel* ui = nullptr;
+    std::unique_ptr<Ui::ParametersPanel> ui;
 };
 
 #endif // PARAMETERSPANEL_H

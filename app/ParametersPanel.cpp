@@ -7,18 +7,18 @@
 
 ParametersPanel::ParametersPanel(QWidget* parent)
     : QWidget(parent)
-    , ui(new Ui::ParametersPanel)
+    , ui(std::make_unique<Ui::ParametersPanel>())
 {
     ui->setupUi(this);
 
-    // 连接 Run 按钮
+    // link 'run' button
     connect(ui->runButton, &QPushButton::clicked,
             this, &ParametersPanel::onRunButtonClicked);
 }
 
 ParametersPanel::~ParametersPanel()
 {
-    delete ui;
+
 }
 
 SimulationConfig ParametersPanel::currentConfig() const

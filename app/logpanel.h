@@ -17,14 +17,14 @@ public:
     ~LogPanel() override;
 
 public slots:
-    // 追加一条日志到日志窗口
+    // Append a log entry to the log window
     void appendMessage(const QString& text);
 
-    // 清空日志
+    // Clear logs
     void clear();
 
 private:
-    Ui::LogPanel* ui = nullptr;
+    std::unique_ptr<Ui::LogPanel> ui;
 };
 
 #endif // LOGPANEL_H

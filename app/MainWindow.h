@@ -44,7 +44,7 @@ private:
     void updateUiForSimulationRunning(bool running);
 
 private:
-    Ui::MainWindow* ui = nullptr;
+    std::unique_ptr<Ui::MainWindow> ui;
 
     ParametersPanel* m_parametersPanel = nullptr;
     LogPanel* m_logPanel = nullptr;

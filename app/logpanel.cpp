@@ -6,15 +6,12 @@
 
 LogPanel::LogPanel(QWidget* parent)
     : QWidget(parent)
-    , ui(new Ui::LogPanel)
+    , ui(std::make_unique<Ui::LogPanel>())
 {
     ui->setupUi(this);
 }
 
-LogPanel::~LogPanel()
-{
-    delete ui;
-}
+LogPanel::~LogPanel() = default;
 
 void LogPanel::appendMessage(const QString& text)
 {
@@ -24,7 +21,7 @@ void LogPanel::appendMessage(const QString& text)
 
     ui->logTextEdit->appendPlainText(text);
 
-    // 自动滚动到末尾，符合“日志面板”的使用习惯
+    // Automatically scrolling to the end aligns with the usage habits of the "log panel".
     QTextCursor cursor = ui->logTextEdit->textCursor();
     cursor.movePosition(QTextCursor::End);
     ui->logTextEdit->setTextCursor(cursor);
