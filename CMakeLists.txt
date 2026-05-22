@@ -10,6 +10,12 @@ option(BUILD_GUI "Build GUI application and visualization modules" ON)
 
 enable_testing()
 
+if(MSVC)
+    add_compile_options(/EHsc)
+else()
+    add_compile_options(-fexceptions)
+endif()
+
 add_subdirectory(core)
 
 # === 单元测试 (Tests) 永远编译 ===
