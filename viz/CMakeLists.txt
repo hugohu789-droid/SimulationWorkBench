@@ -1,8 +1,8 @@
 add_library(viz
-    simulationview.cpp
-    vtkadapter.cpp
-    simulationview.h
-    vtkadapter.h
+    SimulationView.cpp
+    VTKAdapter.cpp
+    SimulationView.h
+    VTKAdapter.h
 )
 
 target_include_directories(viz PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
