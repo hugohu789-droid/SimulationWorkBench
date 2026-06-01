@@ -1,4 +1,4 @@
-#include "logpanel.h"
+#include "LogPanel.h"
 #include "ui_LogPanel.h"
 
 #include <QPlainTextEdit>

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(SimulationWorkBench LANGUAGES CXX)
+project(SimulationWorkBench LANGUAGES C CXX)
 
 
 set(CMAKE_CXX_STANDARD 17)
