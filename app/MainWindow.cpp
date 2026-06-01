@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "ParametersPanel.h"
-#include "LogPanel.h"
+#include "logpanel.h"
 #include "../viz/SimulationView.h"
 #include "SimulationController.h"
 // #include "../core/SimulationConfig.h"
