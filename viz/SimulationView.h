@@ -16,8 +16,12 @@ public:
 
     void setResult(const SimulationResult& result);
 
+protected:
+    void showEvent(QShowEvent* event) override;
+
 private:
     void setupAxesWidget();
+    void installMouseMoveGuard();
 
 private:
     QVTKOpenGLNativeWidget* m_vtkWidget = nullptr;
@@ -26,6 +30,8 @@ private:
 
     vtkSmartPointer<vtkAxesActor> m_axesActor;
     vtkSmartPointer<vtkOrientationMarkerWidget> m_axesWidget;
+
+    bool m_mouseGuardInstalled = false;
 signals:
 };
 

@@ -1,10 +1,15 @@
 #include "SimulationView.h"
-#include "vtkadapter.h"
+#include "VTKAdapter.h"
 #include "../core/SimulationResult.h"
 
 #include <QVBoxLayout>
+#include <QApplication>
 
 #include <QVTKOpenGLNativeWidget.h>
+#include <vtkCallbackCommand.h>
+#include <vtkCommand.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkInteractorStyleTrackballCamera.h>
 
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderer.h>
@@ -15,6 +20,18 @@
 #include <vtkSmartPointer.h>
 #include <vtkAxesActor.h>
 #include <vtkOrientationMarkerWidget.h>
+
+// Custom interactor style: only forwards OnMouseMove to the parent (which rotates/pans
+// the camera) when a mouse button is actually held down. On macOS, QVTKOpenGLNativeWidget
+// delivers mouse-move events even without any button pressed, causing unwanted rotation.
+class GuardedInteractorStyle : public vtkInteractorStyleTrackballCamera {
+public:
+    static GuardedInteractorStyle* New() { return new GuardedInteractorStyle; }
+    void OnMouseMove() override {
+        if (QApplication::mouseButtons() != Qt::NoButton)
+            this->vtkInteractorStyleTrackballCamera::OnMouseMove();
+    }
+};
 
 SimulationView::SimulationView(QWidget* parent)
     : QWidget(parent)
@@ -38,9 +55,21 @@ SimulationView::SimulationView(QWidget* parent)
 
     renderWindow->AddRenderer(m_renderer);
 
-    // Create an empty image actor beforehand, and then feed it data when settingResult.
+    // macOS fix: install MouseMoveGuard on the interactor the first time a render
+    // happens. showEvent is too early — initializeGL() (which creates the interactor)
+    // hasn't run yet. StartEvent fires just before the first actual render, so the
+    // interactor is guaranteed to exist by then.
+    auto* initCb = vtkCallbackCommand::New();
+    initCb->SetCallback([](vtkObject*, unsigned long, void* clientData, void*) {
+        static_cast<SimulationView*>(clientData)->installMouseMoveGuard();
+    });
+    initCb->SetClientData(this);
+    renderWindow->AddObserver(vtkCommand::StartEvent, initCb);
+    initCb->Delete();
+
+    // Actor is added to the renderer only after data is available (in setResult),
+    // to avoid vtkDemandDrivenPipeline errors from rendering an actor with no input.
     m_actor = vtkSmartPointer<vtkImageActor>::New();
-    m_renderer->AddActor(m_actor);
 
     // Parallel projection ensures the image is not distorted.
     m_renderer->GetActiveCamera()->ParallelProjectionOn();
@@ -71,6 +100,27 @@ void SimulationView::setupAxesWidget()
     m_axesWidget->SetInteractive(0); // It cannot be dragged with the mouse; it is only for indication.
 }
 
+void SimulationView::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+    installMouseMoveGuard();
+}
+
+void SimulationView::installMouseMoveGuard()
+{
+    if (m_mouseGuardInstalled)
+        return;
+
+    auto* rw = m_vtkWidget->renderWindow();
+    if (!rw) return;
+    auto* iren = rw->GetInteractor();
+    if (!iren) return;
+
+    vtkSmartPointer<GuardedInteractorStyle> style = vtkSmartPointer<GuardedInteractorStyle>::New();
+    iren->SetInteractorStyle(style);
+    m_mouseGuardInstalled = true;
+}
+
 void SimulationView::setResult(const SimulationResult& result)
 {
     if (!m_vtkWidget || !m_vtkWidget->renderWindow() || !m_renderer) {
@@ -80,8 +130,9 @@ void SimulationView::setResult(const SimulationResult& result)
     // 1. Convert the business layer results into vtkImageData
     vtkSmartPointer<vtkImageData> image = VTKAdapter::createImageFromResult(result);
 
-    // 2.Give the data to the image actor
+    // 2. Give the data to the image actor and ensure it is in the scene
     m_actor->SetInputData(image);
+    m_renderer->AddActor(m_actor); // no-op if already added
 
     // 3. Adjust the camera according to the data range (to display the complete image).
     m_renderer->ResetCamera();
