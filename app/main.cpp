@@ -4,8 +4,16 @@
 #include <QLocale>
 #include <QTranslator>
 
+#include <QSurfaceFormat>
+#include <QVTKOpenGLNativeWidget.h>
+
 int main(int argc, char *argv[])
 {
+    // macOS & Cross-Platform VTK Fix: 
+    // Explicitly request the required OpenGL Core Profile before QApplication is created.
+    // Without this, macOS defaults to a legacy OpenGL 2.1 context, causing VTK 9+ to crash.
+    QSurfaceFormat::setDefaultFormat(QVTKOpenGLNativeWidget::defaultFormat());
+
     QApplication a(argc, argv);
 
     QTranslator translator;
