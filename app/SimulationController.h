@@ -4,7 +4,7 @@
 #include <QObject>
 #include <atomic>
 
-#include "../core/simulationengine.h"
+#include "../core/SimulationEngine.h"
 
 class SimulationConfig;
 class SimulationResult;

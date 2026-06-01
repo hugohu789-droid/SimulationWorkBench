@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "../core/simulationconfig.h"
+#include "../core/SimulationConfig.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ParametersPanel; }
